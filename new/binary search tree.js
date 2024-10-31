@@ -1,212 +1,197 @@
 class Node {
-    constructor(key) {
-        this.key = key;      // Key of the node
-        this.left = null;   // Left child
-        this.right = null;  // Right child
-    }
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
 }
 
 class BinarySearchTree {
-    constructor() {
-        this.root = null;  // Root of the BST
+  constructor() {
+    this.root = null;
+  }
+
+  isEmpty() {
+    return this.root === null;
+  }
+
+  insert(value) {
+    const newNode = new Node(value);
+    if (this.isEmpty()) {
+      this.root = newNode;
+    } else {
+      this.insertNode(this.root, newNode);
     }
+  }
 
-    // Insert a key into the BST
-    insert(key) {
-        const newNode = new Node(key);
-        if (this.root === null) {
-            this.root = newNode;
-        } else {
-            this._insertRec(this.root, newNode);
-        }
+  insertNode(root, newNode) {
+    if (newNode.value < root.value) {
+      if (root.left === null) {
+        root.left = newNode;
+      } else {
+        this.insertNode(root.left, newNode);
+      }
+    } else {
+      if (root.right === null) {
+        root.right = newNode;
+      } else {
+        this.insertNode(root.right, newNode);
+      }
     }
+  }
 
-    // Recursive helper function for insertion
-    _insertRec(node, newNode) {
-        if (newNode.key < node.key) {
-            if (node.left === null) {
-                node.left = newNode;
-            } else {
-                this._insertRec(node.left, newNode);
-            }
-        } else {
-            if (node.right === null) {
-                node.right = newNode;
-            } else {
-                this._insertRec(node.right, newNode);
-            }
-        }
+  search(root, value) {
+    if (!root) {
+      return false;
     }
-
-    // Search for a key in the BST
-    search(key) {
-        return this._searchRec(this.root, key);
+    if (root.value === value) {
+      return true;
+    } else if (value < root.value) {
+      return this.search(root.left, value);
+    } else {
+      return this.search(root.right, value);
     }
+  }
 
-    // Recursive helper function for search
-    _searchRec(node, key) {
-        if (node === null) {
-            return false;  // Key not found
-        }
-        if (key === node.key) {
-            return true;   // Key found
-        } else if (key < node.key) {
-            return this._searchRec(node.left, key);
-        } else {
-            return this._searchRec(node.right, key);
-        }
+  min(root) {
+    if (!root.left) {
+      return root.value;
+    } else {
+      return this.min(root.left);
     }
+  }
 
-    //***********tree traversal********************
-
-    // Pre-order traversal
-    preOrder(root) {
-        let result = [];
-        this._preOrderRec(root, result);
-        return result;
+  max(root) {
+    if (!root.right) {
+      return root.value;
+    } else {
+      return this.max(root.right);
     }
+  }
 
-    _preOrderRec(node, result) {
-        if (node) {
-            result.push(node.key);
-            this._preOrderRec(node.left, result);
-            this._preOrderRec(node.right, result);
-        }
+  delete(value) {
+    this.root = this.deleteNode(this.root, value);
+  }
+
+  deleteNode(root, value) {
+    if (root === null) {
+      return root;
     }
-
-    // In-order traversal
-    inOrder(root) {
-        let result = [];
-        this._inOrderRec(root, result);
-        return result;
+    if (value < root.value) {
+      root.left = this.deleteNode(root.left, value);
+    } else if (value > root.value) {
+      root.right = this.deleteNode(root.right, value);
+    } else {
+      if (!root.left && !root.right) {
+        return null;
+      }
+      if (!root.left) {
+        return root.right;
+      } else if (!root.right) {
+        return root.left;
+      }
+      root.value = this.min(root.right);
+      root.right = this.deleteNode(root.right, root.value);
     }
+    return root;
+  }
 
-    _inOrderRec(node, result) {
-        if (node) {
-            this._inOrderRec(node.left, result);
-            result.push(node.key);
-            this._inOrderRec(node.right, result);
-        }
+  inOrder(root) {
+    if (root) {
+      this.inOrder(root.left);
+      console.log(root.value);
+      this.inOrder(root.right);
     }
+  }
 
-    // Post-order traversal
-    postOrder(root) {
-        let result = [];
-        this._postOrderRec(root, result);
-        return result;
+  preOrder(root) {
+    if (root) {
+      console.log(root.value);
+      this.preOrder(root.left);
+      this.preOrder(root.right);
     }
+  }
 
-    _postOrderRec(node, result) {
-        if (node) {
-            this._postOrderRec(node.left, result);
-            this._postOrderRec(node.right, result);
-            result.push(node.key);
-        }
+  postOrder(root) {
+    if (root) {
+      this.postOrder(root.left);
+      this.postOrder(root.right);
+      console.log(root.value);
     }
+  }
 
-    bfs(root) {
-        let result = [];
-        let queue = [];
-        queue.push(root);
-        while (queue.length > 0) {
-            let curr = queue.shift();
-            result.push(curr.key);
-            if (curr.left) {
-                queue.push(curr.left);
-            }
-            if (curr.right) {
-                queue.push(curr.right);
-            }
-        }
-        return result;
+  levelOrder() {
+    /** Use the optimised queue enqueue and dequeue from queue-object.js instead.
+     * I've used an array for simplicity. */
+    const queue = [];
+    queue.push(this.root);
+    while (queue.length) {
+      let curr = queue.shift();
+      console.log(curr.value);
+      if (curr.left) {
+        queue.push(curr.left);
+      }
+      if (curr.right) {
+        queue.push(curr.right);
+      }
     }
+  }
 
-    //min value
-    min(root) {
-        if (!root.left) {
-            return root.key;
-        } else {
-            return this.min(root.left);
-        }
-
+  height(node) {
+    if (!node) {
+      return 0;
+    } else {
+      const leftHeight = this.height(node.left);
+      const rightHeight = this.height(node.right);
+      return Math.max(leftHeight, rightHeight) + 1;
     }
+  }
 
-    //max value
-    max(root) {
-        if (!root.right) {
-            return root.key;
-        } else {
-            return this.max(root.right);
-        }
-
+  printLevel(node, level) {
+    if (!node) {
+      return;
     }
-
-    //delete node
-    delete(value) {
-        this.root = this.deleteNode(this.root, value);
+    if (level === 1) {
+      console.log(`levell==${node.value} `);
+    } else if (level > 1) {
+      this.printLevel(node.left, level - 1);
+      this.printLevel(node.right, level - 1);
     }
+  }
 
-    deleteNode(root, value) {
-        if (root === null) {
-            return root;
-        }
-        if (value < root.key) {
-            root.left = this.deleteNode(root.left, value);
-        } else if (value > root.key) {
-            root.right = this.deleteNode(root.right, value);
-        } else {
-            // Case 1: Node with no child (leaf node)
-            if (!root.left && !root.right) {
-                return null;
-            }
-            // Case 2: Node with one child (left or right)
-            if (!root.left) {
-                return root.right;
-            } else if (!root.right) {
-                return root.left;
-            }
-            // Case 3: Node with two children
-            // Find the minimum value in the right subtree (successor)
-            root.key = this.min(root.right);
-            root.right = this.deleteNode(root.right, root.key);
-        }
-        return root;
+  isBST(node, min, max) {
+    if (!node) {
+      return true;
     }
-
-
+    if (node.value < min || node.value > max) {
+      return false;
+    }
+    return (
+      this.isBST(node.left, min, node.value) &&
+      this.isBST(node.right, node.value, max)
+    );
+  }
 }
 
-// Example usage
+// TODO level order and delete
+
 const bst = new BinarySearchTree();
-
-// Inserting values
-bst.insert(50);
-bst.insert(30);
-bst.insert(70);
-bst.insert(20);
-bst.insert(40);
-bst.insert(60);
-bst.insert(80);
-
-// Searching for values
-console.log(bst.search(40)); // Output: true
-console.log(bst.search(25)); // Output: false
-
-// Traversals
-console.log("Pre-order traversal:");
-console.log(bst.preOrder(bst.root)); // Output: [50, 30, 20, 40, 70, 60, 80]
-
-console.log("In-order traversal:");
-console.log(bst.inOrder(bst.root)); // Output: [20, 30, 40, 50, 60, 70, 80]
-
-console.log("Post-order traversal:");
-console.log(bst.postOrder(bst.root)); // Output: [20, 40, 30, 60, 80, 70, 50]
-
-console.log("BFS traversal:", bst.bfs(bst.root)); // Output: [50, 30, 70, 20, 40, 60, 80]
-
-console.log("Min value:", bst.min(bst.root)); // Output: 20
-console.log("Max value:", bst.max(bst.root)); // Output: 80
-
-bst.delete(20); // Deleting a node with two children
-
-console.log("In-order traversal:", bst.inOrder(bst.root)); // [40, 60, 70, 80]
+console.log(bst.isEmpty());
+bst.insert(10);
+bst.insert(5);
+bst.insert(15);
+bst.insert(3);
+bst.insert(7);
+bst.insert(13);
+bst.insert(17);
+bst.insert(2);
+console.log(bst.search(bst.root, 10)); // true
+console.log(bst.search(bst.root, 7));  // true
+bst.inOrder(); // 2 3 5 7 10 13 15 17
+bst.preOrder(); // 10 5 3 2 7 15 13 17
+bst.postOrder(); // 2 3 7 5 13 17 15 10
+bst.levelOrder(); // 10 5 15 3 7 13 17 2
+bst.printLevel(bst.root, 2); // levell==5 levell==15
+console.log(bst.min(bst.root)); // 2
+console.log(bst.max(bst.root)); // 17
+console.log(bst.height(bst.root)); // 4
