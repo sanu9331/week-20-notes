@@ -92,7 +92,7 @@ class LinkedList {
             this.head = this.head.next;
             return
         } else {
-            while (curr.data !== value && curr !== null) {
+            while (curr !== null && curr.data !== value) {
                 prev = curr;
                 curr = curr.next
             }
