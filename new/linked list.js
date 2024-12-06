@@ -103,25 +103,38 @@ class LinkedList {
 
     }
 
-    printReverse() {
-        let curr = this.head;
-        let stack = [];
-        while (curr !== null) {
-            stack.push(curr.data);
-            curr = curr.next;
-        }
-        let reversedList = '';
+    // printReverse() {
+    //     let curr = this.head;
+    //     let stack = [];
+    //     while (curr !== null) {
+    //         stack.push(curr.data);
+    //         curr = curr.next;
+    //     }
+    //     let reversedList = '';
 
-        while (stack.length > 0) {
-            reversedList += stack.pop() + '->';
-            // reversedList += stack.pop();
-            // if (stack.length > 0) {
-            //     reversedList += '->';
-            // }
-        }
+    //     while (stack.length > 0) {
+    //         reversedList += stack.pop() + '->';
+    //         // reversedList += stack.pop();
+    //         // if (stack.length > 0) {
+    //         //     reversedList += '->';
+    //         // }
+    //     }
 
-        console.log('reverse:', reversedList);
+    //     console.log('reverse:', reversedList);
+    // }
+ printReverse() {
+    let prev = null;
+    let curr = this.head;
+    while (curr) {
+      let next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
     }
+    this.head = prev;
+     console.log('Reversed list:');
+        this.print();
+  }
 }
 
 const list = new LinkedList();
