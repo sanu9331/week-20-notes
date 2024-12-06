@@ -96,6 +96,8 @@ class BinarySearchTree {
     return root;
   }
 
+
+//DFS (depth first search)
   inOrder(root) {
     if (root) {
       this.inOrder(root.left);
@@ -120,6 +122,8 @@ class BinarySearchTree {
     }
   }
 
+
+//BFS (breadth first search)
   levelOrder() {
     /** Use the optimised queue enqueue and dequeue from queue-object.js instead.
      * I've used an array for simplicity. */
