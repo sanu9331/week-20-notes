@@ -43,6 +43,17 @@ class HashTableWithCollision {
         return undefined;
     }
 
+
+ remove(key) {
+    let index = this.hash(key);
+    const bucket = this.table[index];
+    if (bucket) {
+      const sameKeyItem = bucket.find((item) => item[0] === key);
+      if (sameKeyItem) {
+        bucket.splice(bucket.indexOf(sameKeyItem), 1);
+      }
+    }
+  }
     // Display hash table
     display() {
         for (let i = 0; i < this.table.length; i++) {
