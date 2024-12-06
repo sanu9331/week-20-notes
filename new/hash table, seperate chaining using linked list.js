@@ -13,12 +13,12 @@ class HashTable {
     }
 
     // Hash function to compute index for a given key
-    hash(key) {
-        let hash = 0;
+      hash(key) {
+        let hashValue = 0;
         for (let i = 0; i < key.length; i++) {
-            hash = (hash + key.charCodeAt(i) * i) % this.size; // Simple hash function
+            hashValue += key.charCodeAt(i);
         }
-        return hash;
+        return hashValue % this.size;
     }
 
     // Insert or update a key-value pair
