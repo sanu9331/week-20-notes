@@ -188,6 +188,31 @@ class BinarySearchTree {
   }
 }
 
+//check if its a valid binary search tree
+isBST(root) {
+      let result=[]
+    if(this.root===null){
+        return true;
+    }
+     this.INORDER(result,root);
+     
+     for(let i=0;i<result.length;i++){
+         if(result[i]<=result[i-1]){
+             return false
+         }
+     }
+    return true;
+  }
+  
+  INORDER(result,root){
+      if(root){
+          return this.INORDER(root.left)
+           result.push(root.value);
+           return this.INORDER(root.right)
+      }
+  }
+}
+
 // TODO level order and delete
 
 const bst = new BinarySearchTree();
