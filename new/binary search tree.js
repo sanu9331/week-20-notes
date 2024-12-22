@@ -69,49 +69,41 @@ class BinarySearchTree {
     }
   }
 
-  delete(value) {
-    this.root = this.deleteNode(this.root, value);
-  }
-
- deleteNode(root, value) {
-    // Step 1: Base case - if the root is null, return null (node not found)
+  delete(root, value) {
     if (root === null) {
-        return root;
+        return root; // Node not found
     }
-    // Step 2: If the value to delete is smaller than the root value, go to the left subtree
+
+    // Traverse the tree to find the node to delete
     if (value < root.value) {
-        root.left = this.deleteNode(root.left, value);
-    }
-    // Step 3: If the value to delete is greater than the root value, go to the right subtree
-    else if (value > root.value) {
-        root.right = this.deleteNode(root.right, value);
-    }
-    // Step 4: If the value matches the root value, this is the node to be deleted
-    else {
-        // Case 1: The node has no children (leaf node)
+        root.left = this.delete(root.left, value);
+    } else if (value > root.value) {
+        root.right = this.delete(root.right, value);
+    } else {
+        // Node to be deleted found
+
+        // Case 1: No children
         if (!root.left && !root.right) {
-            return null; // Remove the node by returning null
+            return null;
         }
 
-        // Case 2: The node has one child (either left or right)
+        // Case 2: One child
         if (!root.left) {
-            return root.right; // If no left child, replace with right child
+            return root.right;
         } else if (!root.right) {
-            return root.left; // If no right child, replace with left child
+            return root.left;
         }
 
-        // Case 3: The node has two children
-        // To delete a node with two children, we need to find its in-order successor
-        // (the smallest node in the right subtree), replace the node's value with
-        // the in-order successor's value, and delete the in-order successor.
-        
-        root.value = this.min(root.right); // Replace root value with in-order successor's value
-        
-        // Recursively delete the in-order successor (which is now at the right subtree)
-        root.right = this.deleteNode(root.right, root.value);
+        // Case 3: Two children
+        // Find the in-order successor (smallest node in the right subtree)
+        let minValue = this.min(root.right);
+        root.value = minValue;
+
+        // Delete the in-order successor
+        root.right = this.delete(root.right, minValue);
     }
-    // Step 5: Return the modified root
-    return root;
+
+    return root; // Return the updated root
 }
 
 
