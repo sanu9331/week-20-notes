@@ -35,7 +35,7 @@ class LinkedList {
     append(data) {
         const node = new Node(data);
         if (this.head === null) {
-            console.log('empty')
+            this.head = node;
         } else {
             let curr = this.head;
             while (curr.next !== null) {
@@ -135,6 +135,68 @@ class LinkedList {
      console.log('Reversed list:');
         this.print();
   }
+
+detectCycle(){
+    let fast=this.head
+    let slow=this.head
+    
+    while(fast!==null && fast.next!==null){
+        slow=slow.next
+        fast=fast.next.next
+        if(slow===fast){
+            return true
+        }
+    }
+    return false
+}
+
+nodesCount(){
+let curr=this.head;
+let count=0
+while(curr!==null){
+    count++
+    curr=curr.next
+}
+return count
+}
+
+  findmidElement(){
+      let curr=this.head
+      const res=this.nodesCount()
+      let count=Math.floor(res/2)
+      for(let i=0;i<count;i++){
+          curr=curr.next
+      }
+      return curr.data
+  }
+  
+  isPalindrome(){
+      if(this.head===null){
+          return true
+      }
+      
+      let stack=[]
+      let curr=this.head
+      
+      // Step 1: Push all values into the stack
+      while(curr!==null){
+          stack.push(curr.data)
+          curr=curr.next
+      }
+      
+        curr=this.head
+      
+      // Step 2: Traverse the list again and compare with stack
+      while(curr!==null){
+          const top=stack.pop()
+          if(curr.data!==top){
+              return false
+          }
+          curr=curr.next
+      }
+      return true
+  }
+
 }
 
 const list = new LinkedList();
@@ -153,3 +215,7 @@ list.removeAtValue(10)
 list.print()
 
 list.printReverse();
+console.log('cyclic:',list.detectCycle())
+console.log('node count:',list.nodesCount())
+console.log('mid element=',list.findmidElement())
+console.log('palindrome:',  list.isPalindrome())
