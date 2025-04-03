@@ -96,6 +96,7 @@ graph.addEdge("B", "C");
 graph.display();
 console.log("BFS starting from vertex A:");
 graph.bfs("A");
+graph.dfs('A');
 // graph.removeEdge("A", "B");
 // graph.display();
 // graph.removeVertex("A");
