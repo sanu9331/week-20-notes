@@ -65,6 +65,25 @@ class Graph {
       }
     }
   }
+//DFS traversal
+dfs(start){
+       const stack=[start];
+       const visited=new Set();
+       visited.add(start)
+       
+       while(stack.length>0){
+           const vertex=stack.pop()
+           console.log(vertex);
+           
+           for(let item of this.adjacencyList[vertex]){
+               if(!visited.has(item)){
+                   visited.add(item)
+                   stack.push(item)
+               }
+           }
+       }
+    }
+
 }
 
 const graph = new Graph();
