@@ -44,6 +44,22 @@ class Trie {
         return true;
     }
 
+//print all the words in the trie
+ printAllWords(){
+        let result=[]
+       function dfs(node,currentWord){
+             if (node.isEndOfWord) {
+            result.push(currentWord);
+        }
+        
+          for (const [char, childNode] of node.children) {
+            dfs(childNode, currentWord + char);
+        }
+        }
+         dfs(this.root, "");
+    console.log("Words in Trie:", result);
+    }
+
 
 }
 
